@@ -19,15 +19,19 @@ router.post('/create', (req, res) => {
   );
 });
 
-router.put('/add', (req, res) => {
-  Profile.update({
-    artists: sequelize.fn('array_append', sequelize.col('artists'), req.body.artist)
+router.post('/add', (req, res) => {
+  Profile.create({
+    artist: req.body.artist,
+    url: req.body.url,
+    imgUrl: req.body.imgUrl,
+    owner: req.user.id
+    // artists: sequelize.fn('array_append', sequelize.col('artists'), req.body.artist)
   },
-  {where: {id: req.user.id}})
+  {where: {owner: req.user.id}})
   .then(
     (data) => {
       res.json({
-        artist: req.body.artist
+        message: req.body.artist + ' has been added'
       });
     },
     (error) => {
@@ -36,11 +40,10 @@ router.put('/add', (req, res) => {
   );
 });
 
-router.put('/delete', (req, res) => {
-  Profile.update({
-    artists: sequelize.fn('array_remove', sequelize.col('artists'), req.body.artist)
-  },
-  {where: {id: req.user.id}})
+router.delete('/delete', (req, res) => {
+  Profile.destroy({
+    where: {artist: req.body.artist, owner: req.user.id}
+  })
   .then(
     () => {
       res.json({

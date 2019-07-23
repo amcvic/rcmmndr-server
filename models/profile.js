@@ -1,6 +1,8 @@
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define('profile', {
-    artists: DataTypes.ARRAY(DataTypes.STRING),
+    artist: DataTypes.STRING,
+    url: DataTypes.STRING,
+    imgUrl: DataTypes.STRING,
     owner: DataTypes.INTEGER
   });
 }
